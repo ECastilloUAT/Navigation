@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Death Star Registration</title>
+    <link rel="stylesheet" href="navstyles.css">
+    <style>
+        h2{
+            color: black;
+        }
+        label{
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>HTML Navigation </h1>
+        <nav>
+            <!-- Menu links -->
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="game.html">Game</a></li>
+                <li><a href="hangman.html">Hangman</a></li>
+                <li><a href="input.html">Input</a></li>
+                <li><a href="mayorsimu.html">Objectives</a></li>
+                <li><a href="meme.html">Meme</a></li>
+                <li><a href="table.html">Table</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <hr/>
+        <h2>Registration Form</h2>
+        <!-- Create a label and input box for the first name -->
+        <label>First Name</label><br/>
+        <input type="text" id="firstName"><br/>
+        <!-- Create a label and input box for the last name -->
+        <label>Last Name</label><br/>
+        <input type="text" id="lastName"><br/>
+        <!-- Stormtrooper ID -->
+        <label>Stormtrooper ID</label><br/>
+        <input type="text" id="StormtrooperID"><br/>
+        <hr/>
+
+        <!-- Create a button for users to submit -->
+         <button onclick="checkForm()">Submit Form</button>
+
+         <!-- Notice we are leaving HTML and going into JavaScript -->
+          <script>
+            // In JavaScript
+            // Create a function to check the registration form
+            //Check if the variable has more than 20 characters
+            // warning - do not continue the program if invalid
+            function checkForm(){
+                // Get the first name from the form
+                var firstName = document.getElementById("firstName").value;
+                // Get the last name from the form
+                var lastName = document.getElementById("lastName").value;
+                // Get the ID from the form
+                var stormtrooperID = document.getElementById("StormtrooperID").value;
+                // check if hte first name is more than 20 characters
+                if(firstName.length > 20){
+                    alert("First name is too long for a Stormtrooper, please enter name less than 20 characters.")
+                }
+                if(lastName.length > 20){
+                    alert("Last name is too long for a Stormtrooper, please enter name less than 20 characters.")
+                }
+                if(stormtrooperID.length > 6){
+                    alert("ID is too long for a Stormtrooper, please enter name less than 6 characters.")
+                }
+                // lets combine the first and last name then display it
+                var fullName = firstName + " " + lastName;
+                alert("Welcome to the Death Star " + fullName + " with Stormtrooper ID " + stormtrooperID)
+            }
+          </script>
+          <!-- Back to HTML -->
+    </main>
+    <footer>
+        
+    </footer>
+</body>
+</html>

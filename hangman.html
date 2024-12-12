@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangman</title>
+    <link rel="stylesheet" href="navstyles.css">
+    <style>
+        /* Updated Styling for a Better Experience */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 2rem;
+            background-color: #4CAF50; /* Lush Green Background */
+        }
+
+        h1 {
+            color: white;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .game-container {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+            max-width: 600px;
+            margin: 0 auto;
+            border: 2px solid #4CAF50;
+        }
+
+        #word-display {
+            font-size: 2rem;
+            letter-spacing: 0.5rem;
+            margin: 2rem 0;
+            color: #333;
+        }
+
+        #guess-input {
+            font-size: 1.2rem;
+            padding: 0.5rem;
+            width: 50px;
+            text-align: center;
+            margin: 1rem;
+            border: 2px solid #4CAF50;
+            border-radius: 5px;
+        }
+
+        #guess-button {
+            font-size: 1.2rem;
+            padding: 0.5rem 1rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #guess-button:hover {
+            background-color: #45a049;
+        }
+
+        #message {
+            margin: 1rem 0;
+            font-size: 1.2rem;
+            min-height: 1.5rem;
+        }
+
+        #guess-left, #guessed-letters {
+            font-size: 1rem;
+            margin-top: 1rem;
+            color: #555;
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>HTML Navigation </h1>
+        <nav>
+            <!-- Menu links -->
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="game.html">Game</a></li>
+                <li><a href="hangman.html">Hangman</a></li>
+                <li><a href="input.html">Input</a></li>
+                <li><a href="mayorsimu.html">Objectives</a></li>
+                <li><a href="meme.html">Meme</a></li>
+                <li><a href="table.html">Table</a></li>
+            </ul>
+        </nav>
+</header>
+
+<main class="game-container">
+    <div id="word-display"></div>
+    <input type="text" id="guess-input" maxlength="1" placeholder="Enter a letter">
+    <button id="guess-button">Guess!</button>
+    <div id="message"></div>
+    <div id="guess-left"></div>
+    <div id="guessed-letters"></div>
+</main>
+
+<!-- Sound effects for correct and incorrect guesses -->
+<audio id="correct-sound" src="Correct.mp4" preload="auto"></audio>
+<audio id="incorrect-sound" src="Wrong.mp4" preload="auto"></audio>
+
+<script>
+    // List of words to guess
+    const words = ['javascript', 'python', 'java', 'html', 'css', 'php', 'ruby', 'csharp', 'swift', 'kotlin'];
+
+    // Randomly select a word from the list
+    let word = words[Math.floor(Math.random() * words.length)];
+
+    // Split the word into an array of characters
+    let wordArray = word.split('');
+
+    // Create an array to display underscores
+    let displayArray = wordArray.map(() => '_');
+
+    // Initialize guesses left and guessed letters
+    let guessesLeft = 6;
+    let guessedLetters = [];
+
+    // Sound Elements
+    const correctSound = document.getElementById("correct-sound");
+    const incorrectSound = document.getElementById("incorrect-sound");
+
+    // Function to update the display
+    function updateDisplay() {
+        document.getElementById('word-display').textContent = displayArray.join(' ');
+        document.getElementById('guess-left').textContent = `Guesses Left: ${guessesLeft}`;
+        document.getElementById('guessed-letters').textContent = `Guessed Letters: ${guessedLetters.join(', ')}`;
+    }
+
+    // Function to make a guess
+    function makeGuess() {
+        let input = document.getElementById('guess-input');
+        let guess = input.value.toLowerCase();
+        input.value = ''; // Clear input field
+
+        // Validate the input
+        if (!guess.match(/[a-z]/)) {
+            document.getElementById('message').textContent = 'Please enter a letter from a-z';
+            return;
+        }
+
+        // Check if the letter has been guessed already
+        if (guessedLetters.includes(guess)) {
+            document.getElementById('message').textContent = 'You have already guessed that letter';
+            return;
+        }
+
+        // Add the guessed letter to the guessedLetters array
+        guessedLetters.push(guess);
+
+        // Check if the guess is correct
+        if (wordArray.includes(guess)) {
+            wordArray.forEach((letter, index) => {
+                if (letter === guess) {
+                    displayArray[index] = guess;
+                }
+            });
+            document.getElementById('message').textContent = 'Correct guess!';
+            correctSound.play(); // Play correct guess sound
+            document.getElementById('message').style.color = 'green'; // Change message color for correct guess
+        } else {
+            guessesLeft--;
+            document.getElementById('message').textContent = 'Incorrect guess!';
+            incorrectSound.play(); // Play incorrect guess sound
+            document.getElementById('message').style.color = 'red'; // Change message color for incorrect guess
+        }
+
+        // Update the display
+        updateDisplay();
+
+        // Check for win/lose condition
+        if (!displayArray.includes('_')) {
+            document.getElementById('message').textContent = 'Congratulations! You are a winner!';
+            document.getElementById('message').style.color = 'green'; // Green for win
+            document.getElementById('guess-button').disabled = true;
+        } else if (guessesLeft === 0) {
+            document.getElementById('message').textContent = 'Game Over! The word was: ' + word;
+            document.getElementById('message').style.color = 'red'; // Red for loss
+            document.getElementById('guess-button').disabled = true;
+        }
+    }
+
+    // Add event listener for the guess button
+    document.getElementById('guess-button').addEventListener('click', makeGuess);
+
+    // Add event listener for the 'Enter' key
+    document.getElementById('guess-input').addEventListener('keyup', function (event) {
+        if (event.key === 'Enter') {
+            makeGuess();
+        }
+    });
+
+    // Update the initial display
+    updateDisplay();
+</script>
+
+</body>
+</html>
